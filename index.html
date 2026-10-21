@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6fb">
+  <title>Sari-sari Store Inventory</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="app">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Store management</p>
+        <h1 class="title">Sari-sari Store Inventory</h1>
+        <p>Manage products, stock, and sales in one place.</p>
+      </div>
+      <p class="time-label">Current time: <time id="currentTime"></time></p>
+    </header>
+
+    <section class="summary" aria-label="Inventory summary">
+      <article class="summary-card"><span>Products</span><strong id="productCount">0</strong></article>
+      <article class="summary-card"><span>Units in stock</span><strong id="unitCount">0</strong></article>
+      <article class="summary-card"><span>Low-stock products</span><strong id="lowStockCount">0</strong></article>
+    </section>
+
+    <section class="panel" aria-labelledby="formHeading">
+      <h2 id="formHeading">Add product</h2>
+      <form id="itemForm" class="product-form">
+        <label for="itemName">Product name</label>
+        <input id="itemName" name="name" type="text" maxlength="100" required>
+        <label for="itemSku">SKU</label>
+        <input id="itemSku" name="sku" type="text" maxlength="60" required>
+        <label for="itemQuantity">Quantity</label>
+        <input id="itemQuantity" name="quantity" type="number" min="0" step="1" required>
+        <label for="itemPrice">Unit price</label>
+        <input id="itemPrice" name="price" type="number" min="0" step="0.01" required>
+        <div class="form-actions">
+          <button id="submitButton" class="primary" type="submit">Add product</button>
+          <button id="cancelEdit" class="secondary" type="button" hidden>Cancel edit</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="inventoryHeading">
+      <div class="section-heading">
+        <div>
+          <h2 id="inventoryHeading">Inventory</h2>
+          <p>Products with five or fewer units are marked low stock.</p>
+        </div>
+        <div class="toolbar">
+          <label for="currencySelect">Currency</label>
+          <select id="currencySelect">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="CAD">CAD ($)</option>
+            <option value="AUD">AUD ($)</option>
+            <option value="JPY">JPY (¥)</option>
+            <option value="PHP">PHP (₱)</option>
+          </select>
+          <button id="exportCsv" class="secondary" type="button">Export inventory CSV</button>
+        </div>
+      </div>
+      <div class="search-bar">
+        <label for="searchInput">Search products</label>
+        <input id="searchInput" type="search" placeholder="Search by name or SKU">
+        <button id="clearSearch" class="secondary" type="button">Clear</button>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col">Product</th><th scope="col">SKU</th><th scope="col">Quantity</th><th scope="col">Unit price</th><th scope="col">Actions</th></tr></thead>
+          <tbody id="inventoryRows"></tbody>
+        </table>
+      </div>
+      <p id="emptyMessage" class="empty-message" role="status" hidden></p>
+    </section>
+
+    <section class="panel" aria-labelledby="salesHeading">
+      <div class="section-heading">
+        <div>
+          <h2 id="salesHeading">Sales history</h2>
+          <p id="salesSummary" aria-live="polite">0 units sold · $0.00 revenue</p>
+        </div>
+        <div class="toolbar">
+          <label for="salesPeriod">Show</label>
+          <select id="salesPeriod">
+            <option value="month">By month</option>
+            <option value="year">By year</option>
+            <option value="all">All time</option>
+          </select>
+          <select id="salesMonth" aria-label="Sales month"></select>
+          <select id="salesYear" aria-label="Sales year"></select>
+          <button id="exportSalesCsv" class="secondary" type="button">Export sales CSV</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col">Date</th><th scope="col">Product</th><th scope="col">SKU</th><th scope="col">Quantity sold</th><th scope="col">Unit price</th><th scope="col">Total</th><th scope="col">Actions</th></tr></thead>
+          <tbody id="salesRows"></tbody>
+        </table>
+      </div>
+      <p id="salesEmptyMessage" class="empty-message" role="status" hidden></p>
+    </section>
+  </main>
+
+  <dialog id="deleteDialog" aria-labelledby="deleteDialogTitle" aria-describedby="deleteDialogMessage">
+    <div class="dialog-content">
+      <h2 id="deleteDialogTitle">Confirm deletion</h2>
+      <p id="deleteDialogMessage"></p>
+      <div class="dialog-actions">
+        <button id="cancelDelete" class="secondary" type="button">Cancel</button>
+        <button id="confirmDelete" class="danger" type="button">Delete</button>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>
